@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button } from 'antd';
+import React, { useState } from 'react';
+import { Button, Tag } from 'antd';
 import { Chat, Channel, Attachment } from 'stream-chat-react';
 import { ChannelHeader, MessageList, Window } from 'stream-chat-react';
 import { MessageInput, Thread } from 'stream-chat-react';
 import { StreamChat } from 'stream-chat';
-
+import './ChatRoom.css';
 import 'stream-chat-react/dist/css/index.css';
 
 const chatClient = new StreamChat('gx5a64bj4ptz');
@@ -36,6 +36,40 @@ class MyAttachmentComponent extends React.Component {
   }
 }
 
+const MOODS = [
+  [
+    { label: 'Loving', theme: 'orange', points: 50 },
+    { label: 'Joyful', theme: 'orange', points: 50 },
+    { label: 'Optimistic', theme: 'green', points: 50 },
+    { label: 'Tired', theme: 'gray', points: 50 },
+    { label: 'Annoyed', theme: 'red', points: 50 },
+    { label: 'Frustrated', theme: 'red', points: 50 },
+    { label: 'Insecure', theme: 'purple', points: 50 },
+    { label: 'Ashamed', theme: 'blue', points: 50 },
+  ],
+  [
+    { label: 'Excited', theme: 'orange', points: 50 },
+    { label: 'Happy', theme: 'orange', points: 50 },
+    { label: 'Calm', theme: 'green', points: 50 },
+    { label: 'Okay', theme: 'gray', points: 50 },
+    { label: 'Numb', theme: 'gray', points: 50 },
+    { label: 'Angry', theme: 'red', points: 50 },
+    { label: 'Anxious', theme: 'purple', points: 50 },
+    { label: 'Sad', theme: 'blue', points: 50 },
+    { label: 'Depressed', theme: 'blue', points: 50 },
+  ],
+  [
+    { label: 'Confident', theme: 'orange', points: 50 },
+    { label: 'Proud', theme: 'orange', points: 50 },
+    { label: 'Grateful', theme: 'green', points: 50 },
+    { label: 'Bored', theme: 'gray', points: 50 },
+    { label: 'Overwhelmed', theme: 'red', points: 50 },
+    { label: 'Stressed', theme: 'red', points: 50 },
+    { label: 'Afraid', theme: 'purple', points: 50 },
+    { label: 'Guilty', theme: 'blue', points: 50 },
+  ],
+];
+
 chatClient.setUser(
   {
     id: 'delicate-glade-2',
@@ -66,31 +100,68 @@ channel.sendMessage({
   attachments: attachments,
 });
 
-const ChatRoom = () => (
-  <div>
-    <Chat client={chatClient} theme={'messaging'}>
-      <Channel channel={channel} Attachment={MyAttachmentComponent}>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </Window>
-        <Thread />
-      </Channel>
-    </Chat>
+function ChatRoom() {
+  const [showMoodPanel, setShowMoodPanel] = useState(false);
+  const [currentMood, setCurrentMood] = useState(null);
 
-    <Button
-      type="primary"
-      onClick={() => {
-        channel.sendMessage({
-          text:
-            'Your selected product is out of stock, would you like to select one of these alternatives?',
-        });
-      }}
-    >
-      Press me
-    </Button>
-  </div>
-);
+  return (
+    <div style={{ postition: 'relative' }}>
+      <Chat client={chatClient} theme={'messaging'}>
+        <Channel channel={channel} Attachment={MyAttachmentComponent}>
+          <Window>
+            <ChannelHeader />
+            <MessageList />
+            <MessageInput />
+          </Window>
+          <Thread />
+        </Channel>
+      </Chat>
+
+      <Button
+        type="primary"
+        style={{ position: 'fixed', bottom: 0, zIndex: 1000 }}
+        onClick={() => {
+          setShowMoodPanel(true);
+          // channel.sendMessage({
+          //   text:
+          //     'Your selected product is out of stock, would you like to select one of these alternatives?',
+          // });
+        }}
+      >
+        Press me
+      </Button>
+
+      {showMoodPanel && (
+        <div className="selectMood">
+          {MOODS.map((x, index) => (
+            <div className="moodColumn" key={index}>
+              {x.map((item) => (
+                <div
+                  onClick={() => {}}
+                  style={{
+                    background: item.theme,
+                    color: '#fff',
+                    width: 100,
+                    height: 40,
+                    lineHeight: '40px',
+                    borderRadius: 20,
+                  }}
+                  onClick={() => {
+                    console.log(999, showMoodPanel);
+                    setCurrentMood(item);
+                    setShowMoodPanel(false);
+                  }}
+                  key={item.label}
+                >
+                  {item.label}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default ChatRoom;
