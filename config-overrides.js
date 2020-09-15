@@ -14,8 +14,6 @@ module.exports = override(
       javascriptEnabled: true,
       modifyVars: {
         '@font-size-base': '14px',
-        '@primary-color': '#D41117',
-        '@layout-header-background': 'rgba(248,248,248,1)',
       },
     },
   }),

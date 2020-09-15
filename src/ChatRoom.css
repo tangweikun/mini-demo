@@ -10,7 +10,7 @@
   bottom: 0;
   height: 0%;
   animation-name: moveUp;
-  animation-duration: 1s; /* or: Xms */
+  animation-duration: 0.2s; /* or: Xms */
   animation-direction: alternate; /* or: normal */
   animation-timing-function: linear; /* or: ease, ease-in, ease-in-out, linear, cubic-bezier(x1, y1, x2, y2) */
   animation-fill-mode: forwards;
@@ -38,4 +38,24 @@
 
 .moodColumn:nth-child(2n + 1) {
   padding: 40px 0;
+}
+
+.pointPanel {
+  color: #fff;
+  z-index: 1000;
+  background: lightsalmon;
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  padding: 80px 10px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+}
+
+.levelsWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

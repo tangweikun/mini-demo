@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Tag } from 'antd';
+import { Button, Slider } from 'antd';
 import { Chat, Channel, Attachment } from 'stream-chat-react';
 import { ChannelHeader, MessageList, Window } from 'stream-chat-react';
 import { MessageInput, Thread } from 'stream-chat-react';
@@ -70,6 +70,14 @@ const MOODS = [
   ],
 ];
 
+const LEVELS = [
+  { label: 'Slightly', min: 0, max: 19 },
+  { label: 'A little', min: 20, max: 39 },
+  { label: 'Fairly', min: 40, max: 59 },
+  { label: 'Very', min: 60, max: 79 },
+  { label: 'Extremely', min: 80, max: 100 },
+];
+
 chatClient.setUser(
   {
     id: 'delicate-glade-2',
@@ -103,6 +111,7 @@ channel.sendMessage({
 function ChatRoom() {
   const [showMoodPanel, setShowMoodPanel] = useState(false);
   const [currentMood, setCurrentMood] = useState(null);
+  const [showPointPanel, setShowPointPanel] = useState(false);
 
   return (
     <div style={{ postition: 'relative' }}>
@@ -147,9 +156,9 @@ function ChatRoom() {
                     borderRadius: 20,
                   }}
                   onClick={() => {
-                    console.log(999, showMoodPanel);
-                    setCurrentMood(item);
+                    setCurrentMood({ ...item });
                     setShowMoodPanel(false);
+                    setShowPointPanel(true);
                   }}
                   key={item.label}
                 >
@@ -158,6 +167,27 @@ function ChatRoom() {
               ))}
             </div>
           ))}
+        </div>
+      )}
+
+      {showPointPanel && (
+        <div className="pointPanel">
+          <div className="levelsWrapper">
+            {LEVELS.map((x) => (
+              <div key={x.label}>{x.label}</div>
+            ))}
+          </div>
+          <div>
+            <Slider
+              vertical
+              defaultValue={currentMood.points}
+              onChange={(value) => {
+                currentMood.points = value;
+                setCurrentMood({ ...currentMood });
+              }}
+            />
+          </div>
+          <div style={{ fontSize: 20, fontWeight: 'bold' }}>{`${currentMood.points}%`}</div>
         </div>
       )}
     </div>
