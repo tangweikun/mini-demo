@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Slider } from 'antd';
+import { SmileTwoTone, HeartTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import { Chat, Channel, Attachment } from 'stream-chat-react';
 import { ChannelHeader, MessageList, Window } from 'stream-chat-react';
 import { MessageInput, Thread } from 'stream-chat-react';
@@ -35,6 +36,33 @@ class MyAttachmentComponent extends React.Component {
     }
   }
 }
+
+const CATEGORIES = [
+  { label: 'Work', icon: '' },
+  { label: 'School', icon: '' },
+  { label: 'Outdoors', icon: '' },
+  { label: 'Home', icon: '' },
+  { label: 'Being by myself', icon: '' },
+  { label: 'Partner', icon: '' },
+  { label: 'Family', icon: '' },
+  { label: 'Friends', icon: '' },
+  { label: 'Socializing', icon: '' },
+  { label: 'Social Media', icon: '' },
+  { label: 'Music', icon: '' },
+  { label: 'Meditation', icon: '' },
+  { label: 'Good Sleep', icon: '' },
+  { label: 'Bad Sleep', icon: '' },
+  { label: 'Sedentary', icon: '' },
+  { label: 'Exercise', icon: '' },
+  { label: 'Body', icon: '' },
+  { label: 'Sex', icon: '' },
+  { label: 'Health', icon: '' },
+  { label: 'Food', icon: '' },
+  { label: 'Money', icon: '' },
+  { label: 'Weather', icon: '' },
+  { label: 'Cleaning', icon: '' },
+  { label: 'Add', icon: '' },
+];
 
 const MOODS = [
   [
@@ -78,6 +106,11 @@ const LEVELS = [
   { label: 'Extremely', min: 80, max: 100 },
 ];
 
+const HASH = [
+  ...LEVELS.reverse().reduce((acc, x) => [...acc, ...Array(20).fill(x.label)], []),
+  'Extremely',
+];
+
 chatClient.setUser(
   {
     id: 'delicate-glade-2',
@@ -112,6 +145,8 @@ function ChatRoom() {
   const [showMoodPanel, setShowMoodPanel] = useState(false);
   const [currentMood, setCurrentMood] = useState(null);
   const [showPointPanel, setShowPointPanel] = useState(false);
+  const [showCategoryPanel, setShowCategoryPanel] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState('');
 
   return (
     <div style={{ postition: 'relative' }}>
@@ -131,10 +166,6 @@ function ChatRoom() {
         style={{ position: 'fixed', bottom: 0, zIndex: 1000 }}
         onClick={() => {
           setShowMoodPanel(true);
-          // channel.sendMessage({
-          //   text:
-          //     'Your selected product is out of stock, would you like to select one of these alternatives?',
-          // });
         }}
       >
         Press me
@@ -171,23 +202,98 @@ function ChatRoom() {
       )}
 
       {showPointPanel && (
-        <div className="pointPanel">
-          <div className="levelsWrapper">
-            {LEVELS.map((x) => (
-              <div key={x.label}>{x.label}</div>
+        <div className="pointPanelWrapper" style={{ display: 'flex', zIndex: 1000 }}>
+          <div
+            style={{ alignSelf: 'flex-start', margin: 20 }}
+            onClick={() => {
+              setShowPointPanel(false);
+              setShowMoodPanel(true);
+              setCurrentMood(null);
+            }}
+          >
+            Back
+          </div>
+          <div className="pointPanel">
+            <div className="levelsWrapper">
+              {LEVELS.map((x) => (
+                <div key={x.label}>{x.label}</div>
+              ))}
+            </div>
+            <div>
+              <Slider
+                vertical
+                defaultValue={currentMood.points}
+                onChange={(value) => {
+                  currentMood.points = value;
+                  setCurrentMood({ ...currentMood });
+                }}
+              />
+            </div>
+            <div style={{ fontSize: 20, fontWeight: 'bold' }}>{`${currentMood.points}%`}</div>
+          </div>
+
+          <Button
+            type="primary"
+            ghost
+            onClick={() => {
+              setShowPointPanel(false);
+              setShowCategoryPanel(true);
+            }}
+            style={{ width: 300, borderRadius: 20, margin: '20px auto' }}
+          >
+            {`I'm feeling ${HASH[currentMood.points]} ${currentMood.label}`}
+          </Button>
+        </div>
+      )}
+
+      {showCategoryPanel && (
+        <div className="pointPanelWrapper" style={{ display: 'flex', zIndex: 1000 }}>
+          <div
+            style={{ alignSelf: 'flex-end', margin: 20 }}
+            onClick={() => {
+              setShowCategoryPanel(false);
+              channel.sendMessage({
+                text: `I'm feeling ${HASH[currentMood.points]} ${currentMood.label}`,
+              });
+              setCurrentCategory('');
+            }}
+          >
+            Skip
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {CATEGORIES.map((item) => (
+              <div
+                onClick={() => {
+                  setCurrentCategory(item.label);
+                }}
+                key={item.label}
+                style={{ margin: 12, width: 60 }}
+              >
+                <SmileTwoTone
+                  twoToneColor={currentCategory === item.label ? '#eb2f96' : '#52c41a'}
+                />
+                <div>{item.label}</div>
+              </div>
             ))}
           </div>
-          <div>
-            <Slider
-              vertical
-              defaultValue={currentMood.points}
-              onChange={(value) => {
-                currentMood.points = value;
-                setCurrentMood({ ...currentMood });
-              }}
-            />
-          </div>
-          <div style={{ fontSize: 20, fontWeight: 'bold' }}>{`${currentMood.points}%`}</div>
+
+          <Button
+            type="primary"
+            ghost
+            onClick={() => {
+              setShowCategoryPanel(false);
+              channel.sendMessage({
+                text: `I'm feeling ${HASH[currentMood.points]} ${currentMood.label}`,
+              });
+              channel.sendMessage({
+                text: `The factor linked to my happiness is: ${currentCategory}`,
+              });
+              setCurrentCategory('');
+            }}
+            style={{ width: 300, borderRadius: 20, margin: '20px auto' }}
+          >
+            Capture
+          </Button>
         </div>
       )}
     </div>

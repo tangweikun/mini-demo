@@ -40,18 +40,25 @@
   padding: 40px 0;
 }
 
-.pointPanel {
+.pointPanelWrapper {
   color: #fff;
   z-index: 1000;
   background: lightsalmon;
   position: absolute;
+  flex-direction: column;
   display: flex;
-  justify-content: space-around;
-  padding: 80px 10px;
+  justify-content: space-between;
+  /* padding: 80px 10px; */
   left: 0;
   right: 0;
   bottom: 0;
   height: 100%;
+}
+
+.pointPanel {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
 }
 
 .levelsWrapper {
