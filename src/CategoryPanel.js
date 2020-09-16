@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button } from 'antd';
 import { SmileTwoTone } from '@ant-design/icons';
 import { CATEGORIES, HASH } from './constants';
+import Context from './Context';
 
 export default function CategoryPanel(props) {
-  const { channel, setShowCategoryPanel, currentMood } = props;
+  const { channel, setShowCategoryPanel } = props;
   const [currentCategory, setCurrentCategory] = useState('');
+  const { currentMood } = useContext(Context);
 
   return (
     <div className="pointPanelWrapper" style={{ display: 'flex', zIndex: 1000 }}>

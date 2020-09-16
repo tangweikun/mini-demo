@@ -1,12 +1,14 @@
 import React from 'react';
-import logo from './logo.svg';
+import Provider from './Provider';
 import './App.css';
 import ChatRoom from './ChatRoom';
 
 function App() {
   return (
     <div className="App">
-      <ChatRoom />
+      <Provider>
+        <ChatRoom />
+      </Provider>
     </div>
   );
 }

@@ -1,15 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Slider } from 'antd';
 import { HASH, LEVELS } from './constants';
+import Context from './Context';
 
 export default function PointPanel(props) {
-  const {
-    setCurrentMood,
-    setShowMoodPanel,
-    setShowPointPanel,
-    currentMood,
-    setShowCategoryPanel,
-  } = props;
+  const { setShowMoodPanel, setShowPointPanel, setShowCategoryPanel } = props;
+  const { setCurrentMood, currentMood } = useContext(Context);
 
   return (
     <div className="pointPanelWrapper" style={{ display: 'flex', zIndex: 1000 }}>

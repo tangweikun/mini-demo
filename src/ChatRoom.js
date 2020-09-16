@@ -31,7 +31,6 @@ const channel = chatClient.channel('messaging', 'godevs', {
 
 function ChatRoom() {
   const [showMoodPanel, setShowMoodPanel] = useState(false);
-  const [currentMood, setCurrentMood] = useState(null);
   const [showPointPanel, setShowPointPanel] = useState(false);
   const [showCategoryPanel, setShowCategoryPanel] = useState(false);
 
@@ -60,31 +59,21 @@ function ChatRoom() {
 
       {/* 选择心情 */}
       {showMoodPanel && (
-        <MoodPanel
-          setCurrentMood={setCurrentMood}
-          setShowMoodPanel={setShowMoodPanel}
-          setShowPointPanel={setShowPointPanel}
-        />
+        <MoodPanel setShowMoodPanel={setShowMoodPanel} setShowPointPanel={setShowPointPanel} />
       )}
 
       {/* 选择强烈指数 */}
       {showPointPanel && (
         <PointPanel
-          setCurrentMood={setCurrentMood}
           setShowMoodPanel={setShowMoodPanel}
           setShowPointPanel={setShowPointPanel}
-          currentMood={currentMood}
           setShowCategoryPanel={setShowCategoryPanel}
         />
       )}
 
       {/* 选择影响因素 */}
       {showCategoryPanel && (
-        <CategoryPanel
-          channel={channel}
-          setShowCategoryPanel={setShowCategoryPanel}
-          currentMood={currentMood}
-        />
+        <CategoryPanel channel={channel} setShowCategoryPanel={setShowCategoryPanel} />
       )}
     </div>
   );

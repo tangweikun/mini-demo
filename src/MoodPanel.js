@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { MOODS } from './constants';
+import Context from './Context';
 
 export default function MoodPanel(props) {
-  const { setCurrentMood, setShowMoodPanel, setShowPointPanel } = props;
+  const { setShowMoodPanel, setShowPointPanel } = props;
+  const { setCurrentMood } = useContext(Context);
 
   return (
     <div className="selectMood">
