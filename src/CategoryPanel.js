@@ -13,8 +13,8 @@ export default function CategoryPanel(props) {
     <div className="pointPanelWrapper" style={{ display: 'flex', zIndex: 1000 }}>
       <div
         style={{ alignSelf: 'flex-end', margin: 20 }}
-        onClick={() => {
-          setShowCategoryPanel(false);
+        onClick={async () => {
+          await setShowCategoryPanel(false);
           channel.sendMessage({
             text: `I'm feeling ${HASH[currentMood.points]} ${currentMood.label}`,
           });
@@ -42,14 +42,16 @@ export default function CategoryPanel(props) {
       <Button
         type="primary"
         ghost
-        onClick={() => {
+        onClick={async () => {
           setShowCategoryPanel(false);
-          channel.sendMessage({
+          await channel.sendMessage({
             text: `I'm feeling ${HASH[currentMood.points]} ${currentMood.label}`,
           });
-          channel.sendMessage({
-            text: `The factor linked to my happiness is: ${currentCategory}`,
-          });
+
+          currentCategory !== '' &&
+            (await channel.sendMessage({
+              text: `The factor linked to my happiness is: ${currentCategory}`,
+            }));
           setCurrentCategory('');
         }}
         style={{ width: 300, borderRadius: 20, margin: '20px auto' }}
